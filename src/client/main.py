@@ -8,6 +8,7 @@ def get(
 
 
 def borrow(book_id, duration) -> t.Tuple[str, int]:
+    # set book to unavailable
     # call admin endpoint to update books
     return "Request approved", 200
 
