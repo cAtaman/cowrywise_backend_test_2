@@ -1,0 +1,115 @@
+swagger: "2.0"
+info:
+  title: Biblio-MX Admin
+  description: Used by admin to manage book catalogue and users
+  version: 1.0.0
+
+basePath: /
+consumes:
+  - application/json
+produces:
+  - application/json
+
+
+paths:
+  /books:
+    get:
+      tags: [Books]
+      operationId: src.admin.main.get
+      summary: Get books by availability
+      parameters:
+        - in: query
+          name: available
+          type: boolean
+          required: true
+      responses:
+        200:
+          description: Returns books
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Book'
+        400:
+          description: Something went wrong
+
+    post:
+      tags: [Books]
+      operationId: src.admin.main.add_book
+      summary: Add book
+      parameters:
+        - in: body
+          name: book_data
+          schema:
+            $ref: '#/definitions/Book'
+          required: true
+      responses:
+        200:
+          description: Returns the created book details
+          schema:
+            $ref: '#/definitions/Book'
+        400:
+          description: Something went wrong
+
+    delete:
+      tags: [Books]
+      operationId: src.admin.main.remove_book
+      summary: Remove book from catalogue
+      parameters:
+        - in: query
+          name: book_id
+          type: string
+          required: true
+      responses:
+        200:
+          description: Returns the deleted book details
+          schema:
+            $ref: '#/definitions/Book'
+        400:
+          description: Something went wrong
+
+definitions:
+  Book:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      publisher:
+        type: string
+      category:
+        type: string
+      available:
+        type: boolean
+      current_borrow_id:
+        type: string
+    required: [name, publisher, category]
+
+  User:
+    type: object
+    properties:
+      user_id:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+    required: [ email, first_name, last_name ]
+
+  Borrows:
+    type: object
+    properties:
+      borrow_id:
+        type: string
+      book_id:
+        type: string
+      user_id:
+        type: string
+      borrow_date:
+        type: string
+      duration:
+        type: integer
+      return_date:
+        type: string
