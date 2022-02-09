@@ -15,7 +15,7 @@ paths:
   /books:
     get:
       tags: [Books]
-      operationId: src.admin.main.get
+      operationId: src.admin.main.get_books
       summary: Get books by availability
       parameters:
         - in: query
@@ -61,9 +61,27 @@ paths:
           required: true
       responses:
         200:
-          description: Returns the deleted book details
+          description: Book removed from catalogue
+        400:
+          description: Something went wrong
+
+  /users:
+    get:
+      tags: [Books]
+      operationId: src.admin.main.get_users
+      summary: Get users
+      parameters:
+        - in: query
+          name: with_borrows
+          type: boolean
+          required: false
+      responses:
+        200:
+          description: Returns users enrolled to library [optionally with a list of books they've borrowed]
           schema:
-            $ref: '#/definitions/Book'
+            type: array
+            items:
+              $ref: '#/definitions/Book'
         400:
           description: Something went wrong
 
