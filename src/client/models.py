@@ -9,7 +9,7 @@ class Book(db.Model):
     publisher = db.Column('PUBLISHER', db.Text, nullable=False)
     category = db.Column('CATEGORY', db.Text, nullable=False)
     available = db.Column('AVAILABLE', db.Boolean, nullable=False)
-    current_borrow_id = db.Column('CURRENT_BORROW_ID', db.Integer)
+    current_borrow_id = db.Column('CURRENT_BORROW_ID', db.Integer, nullable=True)
 
 
 class BookSchema(ma.SQLAlchemyAutoSchema):
@@ -31,7 +31,7 @@ class User(db.Model):
 
 class UserSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
-        model = Book
+        model = User
         load_instance = True
         sqla_session = db.session
 
