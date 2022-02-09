@@ -96,6 +96,3 @@ class AdminAPICallHandler:
 
     def new_user(self):
         pass
-
-    # def return_book(self):
-    #     pass
