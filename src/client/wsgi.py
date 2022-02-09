@@ -1,6 +1,7 @@
 import os
 import secrets
 import connexion
+from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 
@@ -40,6 +41,7 @@ app = connexion_app.app  # flask app object
 # =================================================================
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
+bcrypt = Bcrypt(app)
 
 # =================================================================
 #                          ADD SWAGGER APIs
