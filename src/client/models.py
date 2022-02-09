@@ -4,12 +4,12 @@ from .wsgi import db, ma
 class Book(db.Model):
     __tablename__ = 'Books'
     __table_args__ = {'extend_existing': True}
-    book_id = db.Column('BOOK_ID', db.Text, primary_key=True)
+    book_id = db.Column('BOOK_ID', db.Integer, primary_key=True, autoincrement=True)
     name = db.Column('NAME', db.Text, nullable=False)
     publisher = db.Column('PUBLISHER', db.Text, nullable=False)
     category = db.Column('CATEGORY', db.Text, nullable=False)
     available = db.Column('AVAILABLE', db.Boolean, nullable=False)
-    current_borrow_id = db.Column('CURRENT_BORROW_ID', db.Text)
+    current_borrow_id = db.Column('CURRENT_BORROW_ID', db.Integer)
 
 
 class BookSchema(ma.SQLAlchemyAutoSchema):
@@ -22,7 +22,7 @@ class BookSchema(ma.SQLAlchemyAutoSchema):
 class User(db.Model):
     __tablename__ = 'Users'
     __table_args__ = {'extend_existing': True}
-    user_id = db.Column('USER_ID', db.Text, primary_key=True)
+    user_id = db.Column('USER_ID', db.Integer, primary_key=True, autoincrement=True)
     email = db.Column('EMAIL', db.Text, nullable=False)
     first_name = db.Column('FIRST_NAME', db.Text, nullable=False)
     last_name = db.Column('LAST_NAME', db.Text, nullable=False)

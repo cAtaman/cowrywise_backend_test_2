@@ -100,14 +100,14 @@ definitions:
       available:
         type: boolean
       current_borrow_id:
-        type: string
+        type: integer
     required: [name, publisher, category]
 
   User:
     type: object
     properties:
       user_id:
-        type: string
+        type: integer
       email:
         type: string
       first_name:

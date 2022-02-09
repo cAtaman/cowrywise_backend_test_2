@@ -57,7 +57,7 @@ paths:
       parameters:
         - in: query
           name: book_id
-          type: string
+          type: integer
           required: true
       responses:
         200:
@@ -82,14 +82,14 @@ definitions:
       available:
         type: boolean
       current_borrow_id:
-        type: string
+        type: integer
     required: [name, publisher, category]
 
   User:
     type: object
     properties:
       user_id:
-        type: string
+        type: integer
       email:
         type: string
       first_name:
@@ -104,7 +104,7 @@ definitions:
     type: object
     properties:
       borrow_id:
-        type: string
+        type: integer
       book_id:
         type: string
       user_id:

@@ -22,7 +22,7 @@ def get(
     return [books_dict], 200
 
 
-def borrow(book_id, duration) -> t.Tuple[str, int]:
+def borrow(book_id: int, duration: int) -> t.Tuple[str, int]:
     book = Book.query.filter_by(book_id=book_id).first()
     if book and book.available:
         book.available = False
@@ -37,7 +37,7 @@ def borrow(book_id, duration) -> t.Tuple[str, int]:
 
 
 # todo: implement this
-def return_book(book_id) -> t.Tuple[str, int]:
+def return_book(book_id: int) -> t.Tuple[str, int]:
     book = Book.query.filter_by(book_id=book_id).first()
     if book and not book.available:
         book.available = True
