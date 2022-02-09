@@ -42,7 +42,7 @@ pip install -r requirements.txt
 pytest tests.py
 ```
 
-## To run the server
+## Running the server (manual)
 ###### Notes 
   - `CLIENT_PORT` is the port you want the client API to run at
   - `ADMIN_PORT` is the port you want the admin API to run at
@@ -75,3 +75,28 @@ while the admin API is at
 http://localhost:ADMIN_PORT/
 ``` 
 
+## Running the server (docker)
+### build the images
+  - Client API image
+    ```bash
+    sudo docker build -t client_api -f Dockerfile_client --build-arg CLIENT_HOST=<desired_client_host> --build-arg CLIENT_PORT=<desired_client_port> --build-arg ADMIN_HOST=<desired_admin_host> --build-arg ADMIN_PORT=<desired_admin_port> --build-arg SECRET_KEY=<your_secret_key> .
+    ```
+  - Admin API image
+    ```bash
+    sudo docker build -t client_api -f Dockerfile_admin --build-arg CLIENT_HOST=<desired_client_host> --build-arg CLIENT_PORT=<desired_client_port> --build-arg ADMIN_HOST=<desired_admin_host> --build-arg ADMIN_PORT=<desired_admin_port> --build-arg SECRET_KEY=<your_secret_key> .
+    ```
+
+### run images
+  - Client 
+    ```bash
+    sudo docker run -p <desired_client_port>:3000 client_api:latest
+    ```
+  - Admin 
+    ```bash
+    sudo docker run -p <desired_admin_port>:3001 client_api:latest
+    ```
+
+## View the Swagger API docs
+  Visit the `/ui` route on any of the running container's urls with `http://<host>:<port>/ui`
+  
+  Example: `http://0.0.0.0:1759/ui`
