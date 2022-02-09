@@ -56,12 +56,12 @@ chmod +x run.sh
 - Windows
   - open a terminal and enter
     ```cmd
-    set FLASK_APP=src.client.wsgi:app
+    set FLASK_APP=app:client_app
     flask run --host 0.0.0.0 --port CLIENT_PORT &
     ```
   - open another terminal and enter
     ```cmd
-    set FLASK_APP=src.admin.wsgi:app
+    set FLASK_APP=app:admin_app
     flask run --host 0.0.0.0 --port ADMIN_PORT &
     ```
 
