@@ -31,6 +31,6 @@ RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
     && python3.9 -m pip install -r requirements.txt
 
 
-EXPOSE 3000
+EXPOSE 3001
 
-ENTRYPOINT ["flask", "run", "--port=3000", "--host=0.0.0.0"]
+ENTRYPOINT ["flask", "run", "--port=3001", "--host=0.0.0.0"]
