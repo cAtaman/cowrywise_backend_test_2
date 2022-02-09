@@ -1,0 +1,36 @@
+
+# Getting Base Image
+FROM ubuntu:20.04
+
+#Installing Python 3.9, pip3, firefox, CURL, GPG and wget
+RUN apt-get update && apt-get install -y python3.9 python3.9-dev python3.9-distutils curl
+
+#Pass environmental variables in Docker ENV
+ARG CLIENT_HOST
+ARG CLIENT_PORT
+ARG ADMIN_HOST
+ARG ADMIN_PORT
+ARG SECRET_KEY
+
+ENV CLIENT_HOST=$CLIENT_HOST
+ENV CLIENT_PORT=$CLIENT_PORT
+ENV ADMIN_HOST=$ADMIN_HOST
+ENV ADMIN_PORT=$ADMIN_PORT
+ENV SECRET_KEY=$SECRET_KEY
+ENV FLASK_APP="app:client_app"
+
+# Copy Application files to the working directory
+WORKDIR /code/
+COPY src src
+COPY app.py app.py
+COPY requirements.txt requirements.txt
+
+# Install pip3 for python3.9 and Installing dependencies with pip3
+RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
+    && python3.9 get-pip.py --user \
+    && python3.9 -m pip install -r requirements.txt
+
+
+EXPOSE 3000
+
+ENTRYPOINT ["flask", "run", "--port=3000", "--host=0.0.0.0"]
