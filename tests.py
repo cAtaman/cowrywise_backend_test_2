@@ -125,3 +125,23 @@ def mock_admin():
     mock_db.create_all()
     return mock_db, Book, BookSchema, Borrow, BorrowSchema, User, UserSchema
 
+
+def test_admin_add_book(mock_client, mock_admin, mocker, monkeypatch):
+    mock_db, Book, BookSchema, Borrow, BorrowSchema, User, UserSchema = mock_admin
+    mock_ClientAPICallHandler = mocker.Mock(add_book=lambda x: f"Book: {x} added")
+    monkeypatch.setattr(ad_main, "db", mock_db)
+    monkeypatch.setattr(ad_main, "ClientAPICallHandler", mock_ClientAPICallHandler)
+
+    books_init = Book.query.all()
+    assert len(books_init) == 0
+
+    book_dets, status = ad_main.add_book({
+        "name": "The Philosoper's stone",
+        "publisher": "Scholastica",
+        "author": "J. K. Rowling",
+        "category": "Fiction",
+        "available": True
+    })
+    books_after_add = Book.query.all()
+    assert books_after_add[0].publisher == "Scholastica"
+    assert len(books_after_add) == 1
