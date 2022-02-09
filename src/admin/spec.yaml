@@ -67,7 +67,7 @@ paths:
 
   /users:
     get:
-      tags: [Books]
+      tags: [Users]
       operationId: src.admin.main.get_users
       summary: Get users
       parameters:

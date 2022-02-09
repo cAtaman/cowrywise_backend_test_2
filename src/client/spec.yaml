@@ -106,10 +106,6 @@ paths:
           schema:
             $ref: '#/definitions/User'
           required: true
-        - in: query
-          name: duration
-          type: integer
-          required: true
       responses:
         200:
           description: Request approved
