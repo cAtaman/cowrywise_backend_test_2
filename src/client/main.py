@@ -1,5 +1,10 @@
 import typing as t
 
+from .models import Book
+from .models import BookSchema
+from .models import User
+from .models import UserSchema
+
 
 def get(
         book_id=None, publisher=None, category=None
