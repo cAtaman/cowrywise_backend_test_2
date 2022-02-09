@@ -19,6 +19,7 @@ def get_books(available: bool = None) -> t.Tuple[t.List[dict], int]:
         return books_dict, 200
 
     books_dict = BookSchema(many=True).dump(Book.query.filter_by(available=available).all())
+    # attach return date if getting unavailable books
     if not available:
         all_borrows = Borrow.query.filter(Borrow.return_date >= datetime.now().date()).all()
         all_borrows = BorrowSchema(many=True).dump(all_borrows)
@@ -37,7 +38,6 @@ def add_book(book_data: dict) -> t.Tuple[dict, int]:
     book = BookSchema().load(book_data)
     db.session.add(book)
     db.session.commit()
-    # todo: call client (hidden) api to add book
     client_handler = ClientAPICallHandler(CLIENT_HOST, CLIENT_PORT)
     client_handler.add_book(book_data)
     return BookSchema().dump(book), 200
@@ -48,7 +48,6 @@ def remove_book(book_id: int) -> t.Tuple[str, int]:
     if book:
         db.session.delete(book)
         db.session.commit()
-        # todo: call client (hidden) api to remove book
         client_handler = ClientAPICallHandler(CLIENT_HOST, CLIENT_PORT)
         client_handler.remove_book(book_id)
         return "Book removed successfully", 200
@@ -76,6 +75,7 @@ def get_users(with_borrows: bool = False):
 
 
 class ClientAPICallHandler:
+    """Handles internal calls to Client API"""
     host: str
     port: str
     scheme: str = "http"
@@ -85,10 +85,14 @@ class ClientAPICallHandler:
         self.port = port
         self.scheme = scheme or self.scheme
         self.headers = {"secret": SECRET_KEY}
+        self.base_url = f"{self.scheme}://{self.host}:{self.port}/"
 
     def remove_book(self, book_id: int):
-        # resp = requests.post()
-        pass
+        url = self.base_url + "books"
+        resp = requests.delete(url, params={"book_id": book_id})
+        return resp.status_code
 
     def add_book(self, book_data: dict):
-        pass
+        url = self.base_url + "books"
+        resp = requests.post(url, json=book_data)
+        return resp.status_code

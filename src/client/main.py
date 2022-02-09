@@ -1,11 +1,13 @@
 import typing as t
 
+import requests
+
 from .models import Book
 from .models import BookSchema
 from .models import User
 from .models import UserSchema
 from .wsgi import db, bcrypt
-from ..constants import ADMIN_HOST, ADMIN_PORT
+from ..constants import ADMIN_HOST, ADMIN_PORT, SECRET_KEY
 
 
 def get(
@@ -36,21 +38,6 @@ def borrow(book_id: int, duration: int) -> t.Tuple[str, int]:
         return "Sorry this book is unavailable at the moment", 404
 
 
-# todo: implement this
-def return_book(book_id: int) -> t.Tuple[str, int]:
-    book = Book.query.filter_by(book_id=book_id).first()
-    if book and not book.available:
-        book.available = True
-        db.session.add(book)
-        db.session.commit()
-        # todo: call admin endpoint to update books
-        # admin_handler = AdminAPICallHandler(ADMIN_HOST, ADMIN_PORT)
-        # admin_handler.return_book()
-        return "Request approved", 200
-    else:
-        return "Book does not belong to Biblio-MX", 400
-
-
 def enrol(user_data: dict) -> t.Tuple[str, int]:
     new_user_dict = {
         "email": user_data.get("email"),
@@ -79,6 +66,7 @@ def enrol(user_data: dict) -> t.Tuple[str, int]:
 
 
 class AdminAPICallHandler:
+    """To handle internal calls to Admin API"""
     host: str
     port: str
     scheme: str = "http"
@@ -87,12 +75,16 @@ class AdminAPICallHandler:
         self.host = host
         self.port = port
         self.scheme = scheme or self.scheme
+        self.headers = {"secret": SECRET_KEY}
+        self.base_url = f"{self.scheme}://{self.host}:{self.port}/"
 
-    def return_book(self):
-        pass
+    def borrow_book(self, book_id, duration, user_id):
+        url = self.base_url + "books"
+        params = {"book_id": book_id, "duration": duration, "user_id": user_id}
+        resp = requests.post(url, params=params, headers=self.headers)
+        return resp
 
-    def borrow_book(self):
-        pass
-
-    def new_user(self):
-        pass
+    def new_user(self, user_data):
+        url = self.base_url + "users"
+        resp = requests.post(url, json=user_data, headers=self.headers)
+        return resp
