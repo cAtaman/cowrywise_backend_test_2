@@ -22,7 +22,7 @@ def create_app(
     db_uri = 'sqlite:///' + db_path
     connex_app.app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     connex_app.app.config['SECRET_KEY'] = secrets.token_hex(32)
-    connex_app.app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+    connex_app.app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     connex_app.app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
     # to preserve the sort order of json objects
     connex_app.app.config['JSON_SORT_KEYS'] = False
