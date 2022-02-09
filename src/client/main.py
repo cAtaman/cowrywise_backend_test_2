@@ -76,3 +76,26 @@ def enrol(user_data: dict) -> t.Tuple[str, int]:
     # admin_handler = AdminAPICallHandler(ADMIN_HOST, ADMIN_PORT)
     # admin_handler.new_user(new_user_dict)
     return "Enrolment successful", 200
+
+
+class AdminAPICallHandler:
+    host: str
+    port: str
+    scheme: str = "http"
+
+    def __init__(self, host, port, scheme=None):
+        self.host = host
+        self.port = port
+        self.scheme = scheme or self.scheme
+
+    def return_book(self):
+        pass
+
+    def borrow_book(self):
+        pass
+
+    def new_user(self):
+        pass
+
+    # def return_book(self):
+    #     pass
