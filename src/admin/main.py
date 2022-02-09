@@ -35,7 +35,14 @@ def get_books(available: bool = None) -> t.Tuple[t.List[dict], int]:
 
 
 def add_book(book_data: dict) -> t.Tuple[dict, int]:
-    book = BookSchema().load(book_data)
+    new_book_dict = {
+        "name": book_data.get("name"),
+        "author": book_data.get("author"),
+        "publisher": book_data.get("publisher"),
+        "category": book_data.get("category"),
+        "available": book_data.get("available")
+    }
+    book = BookSchema().load(new_book_dict)
     db.session.add(book)
     db.session.commit()
     client_handler = ClientAPICallHandler(CLIENT_HOST, CLIENT_PORT)
@@ -44,12 +51,12 @@ def add_book(book_data: dict) -> t.Tuple[dict, int]:
 
 
 def remove_book(book_id: int) -> t.Tuple[str, int]:
-    book = Book.query.filter_by(book_id=book_id)
+    book = Book.query.filter_by(book_id=book_id).first()
     if book:
-        db.session.delete(book)
-        db.session.commit()
         client_handler = ClientAPICallHandler(CLIENT_HOST, CLIENT_PORT)
         client_handler.remove_book(book_id)
+        db.session.delete(book)
+        db.session.commit()
         return "Book removed successfully", 200
     else:
         return "Book was not in catalogue", 400
@@ -62,15 +69,16 @@ def get_users(with_borrows: bool = False):
         borrows_by_user = {}
         for borrow in all_borrows:
             br = borrows_by_user.get(borrow["user_id"], [])
-            borrows_by_user[borrow["user_id"]] = br.append(borrow)
+            borrows_by_user[borrow["user_id"]] = br + [borrow]
 
         for user in all_users:
             borrows = borrows_by_user.get(user["user_id"], [])
             borrowed_book_ids = [b["book_id"] for b in borrows]
             user["books_borrowed"] = list(map(
-                lambda x: BookSchema(many=True).dump(Book.query.filter_by(book_id=x).first()),
+                lambda x: BookSchema().dump(Book.query.filter_by(book_id=x).first()),
                 borrowed_book_ids
             ))
+            user.pop("password")
     return all_users, 200
 
 

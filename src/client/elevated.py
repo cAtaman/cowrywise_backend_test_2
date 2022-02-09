@@ -13,7 +13,7 @@ def add_book(book_data: dict) -> t.Tuple[dict, int]:
 
 
 def remove_book(book_id: int) -> t.Tuple[str, int]:
-    book = Book.query.filter_by(book_id=book_id)
+    book = Book.query.filter_by(book_id=book_id).first()
     if book:
         db.session.delete(book)
         db.session.commit()

@@ -6,6 +6,7 @@ class Book(db.Model):
     __table_args__ = {'extend_existing': True}
     book_id = db.Column('BOOK_ID', db.Integer, primary_key=True, autoincrement=True)
     name = db.Column('NAME', db.Text, nullable=False)
+    author = db.Column('AUTHOR', db.Text, nullable=False)
     publisher = db.Column('PUBLISHER', db.Text, nullable=False)
     category = db.Column('CATEGORY', db.Text, nullable=False)
     available = db.Column('AVAILABLE', db.Boolean, nullable=False)

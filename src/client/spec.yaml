@@ -30,6 +30,10 @@ paths:
           name: category
           type: string
           required: false
+        - in: query
+          name: available
+          type: boolean
+          required: false
       responses:
         200:
           description: Returns books
@@ -87,6 +91,10 @@ paths:
           name: duration
           type: integer
           required: true
+        - in: query
+          name: email
+          type: string
+          required: true
       responses:
         200:
           description: Request approved
@@ -121,6 +129,8 @@ definitions:
       book_id:
         type: integer
       name:
+        type: string
+      author:
         type: string
       publisher:
         type: string

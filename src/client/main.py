@@ -11,7 +11,7 @@ from ..constants import ADMIN_HOST, ADMIN_PORT, SECRET_KEY
 
 
 def get(
-        book_id=None, publisher=None, category=None
+        book_id=None, publisher=None, category=None, available=None
 ) -> t.Tuple[list, int]:
     query = Book.query
     if book_id:
@@ -20,19 +20,24 @@ def get(
         query = query.filter_by(publisher=publisher)
     if category:
         query = query.filter_by(category=category)
+    if available is not None:
+        query = query.filter_by(available=available)
     books_dict = BookSchema(many=True).dump(query.all())
-    return [books_dict], 200
+    return books_dict, 200
 
 
-def borrow(book_id: int, duration: int) -> t.Tuple[str, int]:
+def borrow(book_id: int, duration: int, email: str) -> t.Tuple[str, int]:
     book = Book.query.filter_by(book_id=book_id).first()
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return f"{email} is not enrolled on Biblio-MX", 400
+
     if book and book.available:
         book.available = False
         db.session.add(book)
         db.session.commit()
-        # todo: call admin endpoint to update books
-        # admin_handler = AdminAPICallHandler(ADMIN_HOST, ADMIN_PORT)
-        # admin_handler.borrow_book(book_id, duration)
+        admin_handler = AdminAPICallHandler(ADMIN_HOST, ADMIN_PORT)
+        admin_handler.borrow_book(book_id, duration, user.user_id)
         return "Request approved", 200
     else:
         return "Sorry this book is unavailable at the moment", 404
@@ -56,12 +61,11 @@ def enrol(user_data: dict) -> t.Tuple[str, int]:
         return f"User with email {email} already exists", 400
 
     new_user_dict["password"] = bcrypt.generate_password_hash(password).decode('utf-8')
-    new_user = UserSchema(new_user_dict).load()
+    new_user = UserSchema().load(new_user_dict)
+    admin_handler = AdminAPICallHandler(ADMIN_HOST, ADMIN_PORT)
+    admin_handler.new_user(new_user_dict)
     db.session.add(new_user)
     db.session.commit()
-    # todo: call admin endpoint to update users
-    # admin_handler = AdminAPICallHandler(ADMIN_HOST, ADMIN_PORT)
-    # admin_handler.new_user(new_user_dict)
     return "Enrolment successful", 200
 
 
@@ -79,9 +83,9 @@ class AdminAPICallHandler:
         self.base_url = f"{self.scheme}://{self.host}:{self.port}/"
 
     def borrow_book(self, book_id, duration, user_id):
-        url = self.base_url + "books"
+        url = self.base_url + "borrow"
         params = {"book_id": book_id, "duration": duration, "user_id": user_id}
-        resp = requests.post(url, params=params, headers=self.headers)
+        resp = requests.get(url, params=params, headers=self.headers)
         return resp
 
     def new_user(self, user_data):

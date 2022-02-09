@@ -2,7 +2,7 @@
 import typing as t
 from datetime import datetime, timedelta
 
-from .models import Book, Borrow, BorrowSchema, User, UserSchema
+from .models import Book, Borrow, User, UserSchema
 from .wsgi import db
 
 
@@ -15,7 +15,7 @@ def borrow(book_id: int, duration: int, user_id: int) -> t.Tuple[str, int]:
         "duration": duration,
         "return_date": datetime.now().date() + timedelta(duration)
     }
-    new_borrow = BorrowSchema().load(new_borrow_dict)
+    new_borrow = Borrow(**new_borrow_dict)
     db.session.add(new_borrow)
     db.session.commit()
 
@@ -26,7 +26,7 @@ def borrow(book_id: int, duration: int, user_id: int) -> t.Tuple[str, int]:
     if not (book and borrow):
         return "Something went wrong", 404
 
-    book.current_borrow_id = borrow.id
+    book.current_borrow_id = borrow.borrow_id
     book.available = False
     db.session.add(book)
     db.session.commit()
@@ -44,7 +44,7 @@ def enrol(user_data: dict) -> t.Tuple[str, int]:
     user = User.query.filter_by(email=email).first()
     if user:
         return f"User with email {email} already exists", 400
-    new_user = UserSchema(new_user_dict).load()
+    new_user = UserSchema().load(new_user_dict)
     db.session.add(new_user)
     db.session.commit()
     return "Enrolment successful", 200

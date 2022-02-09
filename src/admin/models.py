@@ -6,6 +6,7 @@ class Book(db.Model):
     __table_args__ = {'extend_existing': True}
     book_id = db.Column('BOOK_ID', db.Integer, primary_key=True, autoincrement=True)
     name = db.Column('NAME', db.Text, nullable=False)
+    author = db.Column('AUTHOR', db.Text, nullable=False)
     publisher = db.Column('PUBLISHER', db.Text, nullable=False)
     category = db.Column('CATEGORY', db.Text, nullable=False)
     available = db.Column('AVAILABLE', db.Boolean, nullable=False)
@@ -40,8 +41,8 @@ class Borrow(db.Model):
     __tablename__ = 'Borrows'
     __table_args__ = {'extend_existing': True}
     borrow_id = db.Column('BORROW_ID', db.Integer, primary_key=True, autoincrement=True)
-    book_id = db.Column('BOOK_ID', db.Text, nullable=False)
-    user_id = db.Column('USER_ID', db.Text, nullable=False)
+    book_id = db.Column('BOOK_ID', db.Integer, nullable=False)
+    user_id = db.Column('USER_ID', db.Integer, nullable=False)
     borrow_date = db.Column('BORROW_DATE', db.Date, nullable=True)
     duration = db.Column('DURATION', db.Integer, nullable=True)
     return_date = db.Column('RETURN_DATE', db.Date, nullable=True)
