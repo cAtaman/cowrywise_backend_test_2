@@ -1,0 +1,113 @@
+swagger: "2.0"
+info:
+  title: Biblio-MX
+  description: Allows users access to the Biblio-MX library
+  version: 1.0.0
+
+basePath: /
+consumes:
+  - application/json
+produces:
+  - application/json
+
+
+paths:
+  /books:
+    get:
+      tags: [Books]
+      operationId: src.client.main.get
+      summary: Get books; optionally by id, or filter by publisher or category
+      parameters:
+        - in: query
+          name: book_id
+          type: integer
+          required: false
+        - in: query
+          name: publisher
+          type: string
+          required: false
+        - in: query
+          name: category
+          type: string
+          required: false
+      responses:
+        200:
+          description: Returns books
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Book'
+        400:
+          description: Something went wrong
+
+  /borrow:
+    get:
+      tags: [ Borrow ]
+      operationId: src.client.main.borrow
+      summary: Get books; optionally by id, or filter by publisher or category
+      parameters:
+        - in: query
+          name: book_id
+          type: integer
+          required: true
+        - in: query
+          name: duration
+          type: integer
+          required: true
+      responses:
+        200:
+          description: Request approved
+        400:
+          description: Something went wrong
+        404:
+          description: Book unavailable
+
+  /enrol:
+    post:
+      tags: [ Enrol ]
+      operationId: src.client.main.enrol
+      summary: become a member of Biblio-MX
+      parameters:
+        - in: body
+          name: user_data
+          schema:
+            $ref: '#/definitions/User'
+          required: true
+        - in: query
+          name: duration
+          type: integer
+          required: true
+      responses:
+        200:
+          description: Request approved
+        400:
+          description: Something went wrong
+        404:
+          description: Book unavailable
+
+definitions:
+  Book:
+    type: object
+    properties:
+      book_id:
+        type: integer
+      name:
+        type: string
+      publisher:
+        type: string
+      category:
+        type: string
+    required: [ name, publisher, category ]
+
+  User:
+    type: object
+    properties:
+      user_id:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+    required: [ email, first_name, last_name ]
