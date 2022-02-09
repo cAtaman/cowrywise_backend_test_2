@@ -40,6 +40,39 @@ paths:
         400:
           description: Something went wrong
 
+    post:
+      tags: [Books, Elevated]
+      operationId: src.client.elevated.add_book
+      summary: Add book
+      parameters:
+        - in: body
+          name: book_data
+          schema:
+            $ref: '#/definitions/Book'
+          required: true
+      responses:
+        200:
+          description: Returns the created book details
+          schema:
+            $ref: '#/definitions/Book'
+        400:
+          description: Something went wrong
+
+    delete:
+      tags: [Books, Elevated]
+      operationId: src.client.elevated.remove_book
+      summary: Remove book from catalogue
+      parameters:
+        - in: query
+          name: book_id
+          type: integer
+          required: true
+      responses:
+        200:
+          description: Book removed from catalogue
+        400:
+          description: Something went wrong
+
   /borrow:
     get:
       tags: [ Borrow ]

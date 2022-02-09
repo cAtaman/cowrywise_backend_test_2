@@ -85,6 +85,46 @@ paths:
         400:
           description: Something went wrong
 
+    post:
+      tags: [ Users, Elevated ]
+      operationId: src.admin.elevated.enrol
+      summary: become a member of Biblio-MX
+      parameters:
+        - in: body
+          name: user_data
+          schema:
+            $ref: '#/definitions/User'
+          required: true
+      responses:
+        200:
+          description: Request approved
+        400:
+          description: Something went wrong
+        404:
+          description: Book unavailable
+
+  /borrow:
+    get:
+      tags: [ Borrow, Elevated ]
+      operationId: src.admin.elevated.borrow
+      summary: Get books; optionally by id, or filter by publisher or category
+      parameters:
+        - in: query
+          name: book_id
+          type: integer
+          required: true
+        - in: query
+          name: duration
+          type: integer
+          required: true
+      responses:
+        200:
+          description: Request approved
+        400:
+          description: Something went wrong
+        404:
+          description: Book unavailable
+
 definitions:
   Book:
     type: object
