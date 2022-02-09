@@ -71,7 +71,7 @@ definitions:
   Book:
     type: object
     properties:
-      id:
+      book_id:
         type: integer
       name:
         type: string
@@ -95,6 +95,8 @@ definitions:
       first_name:
         type: string
       last_name:
+        type: string
+      password:
         type: string
     required: [ email, first_name, last_name ]
 

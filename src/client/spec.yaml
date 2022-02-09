@@ -97,7 +97,11 @@ definitions:
         type: string
       category:
         type: string
-    required: [ name, publisher, category ]
+      available:
+        type: boolean
+      current_borrow_id:
+        type: string
+    required: [name, publisher, category]
 
   User:
     type: object
@@ -109,5 +113,7 @@ definitions:
       first_name:
         type: string
       last_name:
+        type: string
+      password:
         type: string
     required: [ email, first_name, last_name ]
