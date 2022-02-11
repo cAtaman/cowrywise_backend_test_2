@@ -30,6 +30,7 @@ pycparser==2.21
 pyparsing==3.0.7
 pyrsistent==0.16.1
 pytest==7.0.0
+pytest-mock==3.7.0
 PyYAML==5.4.1
 requests==2.27.1
 six==1.16.0
