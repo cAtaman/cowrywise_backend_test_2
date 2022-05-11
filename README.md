@@ -1,4 +1,4 @@
-# cowrywise_backend_test_2
+# cw_backend_test_2
 API for The Software Engineer (Backend) role second assessment
 
 
