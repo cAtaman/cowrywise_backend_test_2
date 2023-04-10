@@ -79,11 +79,21 @@ http://localhost:ADMIN_PORT/
 ### build the images
   - Client API image
     ```bash
-    sudo docker build -t client_api -f Dockerfile_client --build-arg CLIENT_HOST=<desired_client_host> --build-arg CLIENT_PORT=<desired_client_port> --build-arg ADMIN_HOST=<desired_admin_host> --build-arg ADMIN_PORT=<desired_admin_port> --build-arg SECRET_KEY=<your_secret_key> .
+    sudo docker build -t client_api -f Dockerfile_client \
+    --build-arg CLIENT_HOST=<desired_client_host> \
+    --build-arg CLIENT_PORT=<desired_client_port> \
+    --build-arg ADMIN_HOST=<desired_admin_host> \
+    --build-arg ADMIN_PORT=<desired_admin_port> \
+    --build-arg SECRET_KEY=<your_secret_key> .
     ```
   - Admin API image
     ```bash
-    sudo docker build -t client_api -f Dockerfile_admin --build-arg CLIENT_HOST=<desired_client_host> --build-arg CLIENT_PORT=<desired_client_port> --build-arg ADMIN_HOST=<desired_admin_host> --build-arg ADMIN_PORT=<desired_admin_port> --build-arg SECRET_KEY=<your_secret_key> .
+    sudo docker build -t client_api -f Dockerfile_admin \
+    --build-arg CLIENT_HOST=<desired_client_host> \
+    --build-arg CLIENT_PORT=<desired_client_port> \
+    --build-arg ADMIN_HOST=<desired_admin_host> \
+    --build-arg ADMIN_PORT=<desired_admin_port> \
+    --build-arg SECRET_KEY=<your_secret_key> .
     ```
 
 ### run images
